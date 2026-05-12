@@ -2453,8 +2453,15 @@ def upload_to_image_host():
     if not online_name:
         online_name = os.path.splitext(os.path.basename(abs_image_path))[0]
 
-    # 上传图片
-    upload_url = uploader.upload_file(online_name, abs_image_path)
+    # 上传图片（Cloudinary 等失败时抛异常；ImgBB 等可能返回 None）
+    try:
+        upload_url = uploader.upload_file(online_name, abs_image_path)
+    except Exception as e:
+        logger_manager.exception(f"图片上传异常: {image_path}, host={host_type}")
+        return jsonify(create_response(
+            code=13007,
+            msg=f"图片上传失败（{host_type}）: {e}"
+        )), 500
 
     if upload_url:
         logger_manager.info(f"图片上传成功: {upload_url}")

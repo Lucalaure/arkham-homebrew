@@ -12,6 +12,7 @@
 
 # 排除 venv 目录
 /venv/
+/.venv/
 
 /.idea/
 app.spec

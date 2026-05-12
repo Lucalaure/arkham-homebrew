@@ -36,10 +36,14 @@ class CloudinaryUploader(ImageUploader):
 
     def __init__(self, config: Dict[str, Any]):
         super().__init__(config)
+        # Strip whitespace — pasted API keys often include trailing newlines and break auth.
+        cloud_name = str(config.get("cloud_name") or "").strip()
+        api_key = str(config.get("api_key") or "").strip()
+        api_secret = str(config.get("api_secret") or "").strip()
         cloudinary.config(
-            cloud_name=config["cloud_name"],
-            api_key=config["api_key"],
-            api_secret=config["api_secret"],
+            cloud_name=cloud_name,
+            api_key=api_key,
+            api_secret=api_secret,
         )
 
     def _sanitize_name(self, value: str) -> str:
@@ -92,26 +96,23 @@ class CloudinaryUploader(ImageUploader):
     def upload_file(self, online_name: str, file_path: str) -> Optional[str]:
         """上传文件到 Cloudinary"""
         print(f"{online_name} - 正在上传到 Cloudinary")
-        try:
-            # 获取自定义文件夹配置
-            folder = self.config.get("folder", "AH_LCG")
+        # 获取自定义文件夹配置（与 UI 一致；strip 避免无意空白导致 folder 无效）
+        folder = str(self.config.get("folder", "AH_LCG") or "").strip() or "AH_LCG"
 
-            clean_name = self._build_public_id(online_name, file_path)
+        clean_name = self._build_public_id(online_name, file_path)
 
-            upload_options = {
-                "public_id": clean_name,
-                "folder": folder,
-                "resource_type": "image",
-                "use_filename": True,
-                "unique_filename": False
-            }
+        # public_id 已显式指定时不要再 use_filename，避免与部分 SDK/账户行为冲突
+        upload_options = {
+            "public_id": clean_name,
+            "folder": folder,
+            "resource_type": "image",
+            "use_filename": False,
+            "unique_filename": False,
+        }
 
-            print(f"清理后的public_id: {clean_name}")
-            result = cloudinary.uploader.upload(file_path, **upload_options)
-            return result["secure_url"]
-        except Exception as e:
-            print(f"上传到 Cloudinary 时出错: {e}")
-            return None
+        print(f"清理后的public_id: {clean_name}")
+        result = cloudinary.uploader.upload(file_path, **upload_options)
+        return result.get("secure_url") or result.get("url")
 
 
 class ImgBBUploader(ImageUploader):

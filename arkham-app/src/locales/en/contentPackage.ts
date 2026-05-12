@@ -468,6 +468,16 @@ export default {
       printSheetMode: 'Print Sheet Mode: Laid out according to paper size, with cut guide lines, front and back pages corresponding',
       landscapeNote: 'Note: Landscape cards will be automatically rotated to portrait for printing'
     },
+    modesAtGlance: {
+      title: 'What each export mode does',
+      singleCard:
+        'Creates one multi-page PDF: each card uses its own page (front, then back) at the selected card size.',
+      printSheet:
+        'Creates one PDF with multiple cards per sheet for your paper size, including cut marks; good for batch printing.',
+      images:
+        'Writes each card face as its own image file into a folder under your workspace—no merged PDF.',
+      landscapeNote: 'Landscape-oriented cards are rotated to portrait when needed for printing.'
+    },
     exportParams: {
       title: 'Export Parameters',
       exportMode: 'Export Mode',
@@ -498,7 +508,9 @@ export default {
       folderNamePlaceholder: 'pnp_images',
       folderNameDescription: 'Will create a folder with this name',
       pdfExtension: '.pdf',
-      startExport: 'Start Export PNP PDF',
+      startExportSingleCard: 'Export PNP PDF (single card pages)',
+      startExportPrintSheet: 'Export PNP PDF (print sheets)',
+      startExportImages: 'Export PNP card images',
       exporting: 'Exporting...'
     },
     paperSizes: {
@@ -524,7 +536,8 @@ export default {
       title: 'Export Logs',
       exporting: 'Exporting',
       exportComplete: 'Export Complete',
-      openFileLocation: 'Open File Location'
+      openFileLocation: 'Open File Location',
+      noLogsYet: 'No logs yet'
     },
     messages: {
       exportSuccess: 'PNP PDF export successful!',

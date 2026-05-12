@@ -663,6 +663,28 @@
           <div class="physical-export-panel">
             <h4>{{ $t('contentPackage.pnp.title') }}</h4>
 
+            <n-alert type="info" size="small" class="pnp-modes-overview">
+              <template #icon>
+                <n-icon :component="InformationCircleOutline" />
+              </template>
+              <div>
+                <p class="pnp-modes-overview__title">{{ $t('contentPackage.pnp.modesAtGlance.title') }}</p>
+                <p>
+                  <strong>{{ $t('contentPackage.pnp.exportParams.singleCard') }}</strong>
+                  — {{ $t('contentPackage.pnp.modesAtGlance.singleCard') }}
+                </p>
+                <p>
+                  <strong>{{ $t('contentPackage.pnp.exportParams.printSheet') }}</strong>
+                  — {{ $t('contentPackage.pnp.modesAtGlance.printSheet') }}
+                </p>
+                <p>
+                  <strong>{{ $t('contentPackage.pnp.exportParams.images') }}</strong>
+                  — {{ $t('contentPackage.pnp.modesAtGlance.images') }}
+                </p>
+                <p class="pnp-modes-overview__note">{{ $t('contentPackage.pnp.modesAtGlance.landscapeNote') }}</p>
+              </div>
+            </n-alert>
+
             <!-- 上半部分：左右分栏 -->
             <div class="pnp-top-layout">
               <!-- 左侧：导出状态 -->
@@ -686,18 +708,6 @@
                     </n-descriptions-item>
                   </n-descriptions>
                 </n-card>
-
-                <!-- 导出说明 -->
-                <n-alert type="info" size="small">
-                  <template #icon>
-                    <n-icon :component="InformationCircleOutline" />
-                  </template>
-                  <div>
-                    <p><strong>{{ $t('contentPackage.pnp.exportParams.singleCard') }}：</strong>{{ $t('contentPackage.pnp.description.singleCardMode') }}</p>
-                    <p><strong>{{ $t('contentPackage.pnp.exportParams.printSheet') }}：</strong>{{ $t('contentPackage.pnp.description.printSheetMode') }}</p>
-                    <p style="margin-bottom: 0;"><strong>{{ $t('contentPackage.pnp.description.landscapeNote') }}</strong></p>
-                  </div>
-                </n-alert>
               </div>
 
               <!-- 右侧：导出参数 -->
@@ -781,7 +791,7 @@
                         <template #icon>
                           <n-icon :component="PrintOutline" />
                         </template>
-                        {{ exportingToPnp ? $t('contentPackage.pnp.exportParams.exporting') : $t('contentPackage.pnp.exportParams.startExport') }}
+                        {{ pnpStartExportButtonLabel }}
                       </n-button>
                     </n-form-item>
                   </n-form>
@@ -1234,6 +1244,22 @@ const getDefaultPnpExportParams = () => ({
   prefix: '' // 文件名前缀(仅在images模式下使用)
 });
 const pnpExportParams = ref(getDefaultPnpExportParams());
+
+const pnpStartExportButtonLabel = computed(() => {
+  if (exportingToPnp.value) {
+    return t('contentPackage.pnp.exportParams.exporting');
+  }
+  switch (pnpExportMode.value) {
+    case 'single_card':
+      return t('contentPackage.pnp.exportParams.startExportSingleCard');
+    case 'print_sheet':
+      return t('contentPackage.pnp.exportParams.startExportPrintSheet');
+    case 'images':
+      return t('contentPackage.pnp.exportParams.startExportImages');
+    default:
+      return t('contentPackage.pnp.exportParams.startExportSingleCard');
+  }
+});
 
 // PNP导出选项
 const paperSizeOptions = computed(() => [
@@ -4389,10 +4415,25 @@ watch(() => packageData.value, async (newPackage, oldPackage) => {
 }
 
 .physical-export-panel h4 {
-  margin-bottom: 1.5rem;
+  margin-bottom: 0.75rem;
   color: #333;
   font-size: 1.5rem;
   font-weight: 600;
+}
+
+.pnp-modes-overview {
+  margin-bottom: 1rem;
+}
+
+.pnp-modes-overview__title {
+  font-weight: 600;
+  margin: 0 0 0.5rem 0;
+}
+
+.pnp-modes-overview__note {
+  margin-top: 0.75rem !important;
+  margin-bottom: 0 !important;
+  color: rgba(0, 0, 0, 0.65);
 }
 
 /* PNP上下布局 - 顶部左右分栏，底部日志 */

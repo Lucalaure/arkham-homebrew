@@ -476,6 +476,13 @@ export default {
       printSheetMode: '打印纸模式：按纸张规格排版，带切割辅助线，正反面页对应',
       landscapeNote: '注意：横向卡牌会自动旋转为纵向以便打印'
     },
+    modesAtGlance: {
+      title: '各导出模式说明',
+      singleCard: '生成一份多页 PDF：每张卡单独一页，先正面再背面，按所选卡牌尺寸。',
+      printSheet: '生成一份拼版 PDF：按纸张规格多卡一页，含切割线，适合批量打印。',
+      images: '将每个卡面导出为独立图片文件到工作区下的文件夹，不合并为 PDF。',
+      landscapeNote: '需要时，横向卡牌会自动旋转为纵向以便打印。'
+    },
     exportParams: {
       title: '导出参数',
       exportMode: '导出模式',
@@ -506,7 +513,9 @@ export default {
       folderNamePlaceholder: 'pnp_images',
       folderNameDescription: '将创建以此命名的文件夹',
       pdfExtension: '.pdf',
-      startExport: '开始导出 PNP PDF',
+      startExportSingleCard: '导出 PNP PDF（单卡分页）',
+      startExportPrintSheet: '导出 PNP PDF（打印拼版）',
+      startExportImages: '导出 PNP 卡牌图片',
       exporting: '正在导出...'
     },
     paperSizes: {
